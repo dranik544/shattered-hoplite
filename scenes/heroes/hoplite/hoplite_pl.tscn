@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://sprites/heroes/hoplite/hoplite_pl2.png" type="Texture" id=1]
+[ext_resource path="res://sprites/shadow1.png" type="Texture" id=2]
+[ext_resource path="res://scripts/heroes/hoplite/hoplite_pl.gd" type="Script" id=3]
+
+[node name="hoplite_pl" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="shadow" type="Sprite" parent="."]
+position = Vector2( 0, 8 )
+texture = ExtResource( 2 )
+offset = Vector2( 0, -1 )
+
+[node name="sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+offset = Vector2( 0.5, 1 )
+
+[node name="Tween" type="Tween" parent="."]
