@@ -5,9 +5,11 @@
 [ext_resource path="res://scripts/heroes/hoplite/hoplite_pl.gd" type="Script" id=3]
 
 [node name="hoplite_pl" type="Node2D"]
+z_as_relative = false
 script = ExtResource( 3 )
 
 [node name="shadow" type="Sprite" parent="."]
+modulate = Color( 0, 0, 0, 0.588235 )
 position = Vector2( 0, 8 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -1 )
