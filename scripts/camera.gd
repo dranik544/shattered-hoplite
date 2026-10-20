@@ -10,8 +10,8 @@ func _input(event):
 		elif Input.is_action_pressed("ZOOM_DOWN"):
 			lerpZoom += Vector2.ONE * 0.02
 		
-		lerpZoom.x = clamp(lerpZoom.x, 0.2, 1.0)
-		lerpZoom.y = clamp(lerpZoom.y, 0.2, 1.0)
+		lerpZoom.x = clamp(lerpZoom.x, 0.2, 0.9)
+		lerpZoom.y = clamp(lerpZoom.y, 0.2, 0.9)
 
 func _process(delta):
 	zoom = lerp(zoom, lerpZoom, 5 * delta)

@@ -1,24 +1,30 @@
+# base_enemy.gd
 extends Node2D
 
 var currentCellPOS: Vector2 = Vector2.ZERO
+var freeze: bool = false
 
 export(NodePath) var tilemapPath
 export(NodePath) var playerPATH
 
+export(int) var health = 1
 export(int) var attackDistance = 1
-export(float) var attackDamage = 1.0
+export(int) var attackDamage = 1
 export(Array) var moveDirections = [
 	Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
 	Vector2(1, 1), Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1)
 ]
 
 onready var tween: Tween = $Tween
+onready var sprite = $sprite
+onready var shadow = $shadow
 
 onready var tilemap: Node2D = get_node_or_null(tilemapPath)
 onready var tilemapLayer0: TileMap
 onready var tilemapLayer1: TileMap
 onready var tilemapLayer2: TileMap
 onready var player: Node2D = get_node_or_null(playerPATH)
+onready var default_animation_tween = $default_animation_tween
 
 
 func _init():
@@ -35,9 +41,19 @@ func _ready():
 	
 	currentCellPOS = tilemapLayer1.world_to_map(global_position)
 	global_position = tilemapLayer1.map_to_world(currentCellPOS)
+	
+	start_default_animation()
 
+
+func start_default_animation():
+	default_animation_tween.repeat = true
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
+	default_animation_tween.start()
 
 func move_enemy_to_player():
+	if freeze: return
+	
 	var distance: int = check_distance(currentCellPOS, player.currentCellPOS)
 	
 	if distance <= attackDistance:
@@ -72,19 +88,41 @@ func find_best_step(target_cell: Vector2, currentcell: Vector2 = currentCellPOS)
 func end_turn():
 	Global.turn = true
 	yield(get_tree().create_timer(0.3), "timeout")
-	print("Враг " + str(self) + " сделал ход на клетку " + "НЕИЗВЕСТНО")
+	print("Враг " + str(self) + " сделал ход")
 
 func attack(damage: float = attackDamage):
-	modulate = Color(1, 0, 0)
-	yield(get_tree().create_timer(0.25), "timeout")
-	tween.interpolate_property(self, "modulate", modulate, Color(1, 1, 1), 0.25)
+	player.damage(-damage)
+	print("Игрок атакован")
+
+func damage(attackDamage: int):
+	health += attackDamage
+	tween.interpolate_property(sprite, "modulate", Color(1.0, 0.0, 0.0), Color(1.0, 1.0, 1.0), 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
 	tween.start()
+	
+	if health <= 0: kill()
+
+func kill():
+	freeze = true
+	remove_from_group("enemy")
+	
+	tween.interpolate_property(sprite, "modulate:a", 1.0, 0.0, 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
+	tween.interpolate_property(shadow, "modulate:a", 1.0, 0.0, 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
+	tween.start()
+	yield(tween, "tween_all_completed")
+	
+	queue_free()
 
 func check_distance(cellpos: Vector2, currentpos: Vector2):
 	var distance: int = int(max(abs(currentpos.x - cellpos.x), abs(currentpos.y - cellpos.y)))
 	return distance
 
 func check_valid_to_move_cell(cellpos: Vector2):
+	var enemies: Array = get_tree().get_nodes_in_group("enemy")
+	for i in enemies:
+		if cellpos == i.currentCellPOS:
+			return false
+			break
+	
 	if (
 		tilemapLayer2.get_cell(cellpos.x, cellpos.y) == -1 &&
 		tilemapLayer1.get_cell(cellpos.x, cellpos.y) != -1 &&

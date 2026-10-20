@@ -19,3 +19,5 @@ texture = ExtResource( 1 )
 offset = Vector2( 0.5, 1 )
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="default_animation_tween" type="Tween" parent="."]

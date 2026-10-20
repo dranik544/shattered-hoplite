@@ -1,8 +1,25 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://sprites/heroes/hoplite/hoplite_pl2.png" type="Texture" id=1]
 [ext_resource path="res://sprites/shadow1.png" type="Texture" id=2]
 [ext_resource path="res://scripts/heroes/hoplite/hoplite_pl.gd" type="Script" id=3]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture2D" id=2]
+gradient = SubResource( 1 )
+fill = 1
+fill_from = Vector2( 0.5, 0.5 )
+fill_to = Vector2( -1.5, 0 )
+
+[sub_resource type="GDScript" id=3]
+script/source = "extends TextureRect
+
+
+func _input(event):
+	if Input.is_action_just_pressed(\"V\"): visible = not visible
+"
 
 [node name="hoplite_pl" type="Node2D"]
 z_as_relative = false
@@ -19,3 +36,14 @@ texture = ExtResource( 1 )
 offset = Vector2( 0.5, 1 )
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="default_animation_tween" type="Tween" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="dark border" type="TextureRect" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource( 2 )
+stretch_mode = 1
+script = SubResource( 3 )

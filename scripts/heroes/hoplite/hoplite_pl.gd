@@ -3,11 +3,24 @@ extends Node2D
 
 var currentCellPOS: Vector2 = Vector2.ZERO
 
+
+
+# cheats
+var CHEATfreezeEnemies: bool = false
+
+
+
 export(NodePath) var tilemapPath
 export(NodePath) var hoverPath
 
+export(int) var health = 5
+export(int) var attackDamage = 1
+
 onready var tween: Tween = $Tween
 onready var hover: Sprite = get_node(hoverPath)
+onready var sprite = $sprite
+onready var shadow = $shadow
+onready var default_animation_tween = $default_animation_tween
 
 onready var tilemap: Node2D = get_node_or_null(tilemapPath)
 onready var tilemapLayer0: TileMap
@@ -26,9 +39,23 @@ func _ready():
 	
 	currentCellPOS = tilemapLayer1.world_to_map(global_position)
 	global_position = tilemapLayer1.map_to_world(currentCellPOS)
+	
+	start_default_animation()
+
+
+func start_default_animation():
+	default_animation_tween.repeat = true
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
+	default_animation_tween.start()
 
 func _input(event):
 	if event is InputEvent:
+		# cheats
+		if Input.is_action_just_pressed("CHEAT_FREEZE_ENEMIES"):
+			CHEATfreezeEnemies = not CHEATfreezeEnemies
+			print("===" + ("+ВКЛЮЧЕН" if CHEATfreezeEnemies else "-ВЫКЛЮЧЕН") + " ЧИТ НА ЗАМОРОЗКУ ВРАГОВ! ===")
+		
 		if Input.is_action_just_pressed("WAIT"):
 			end_turn(false)
 	
@@ -37,6 +64,12 @@ func _input(event):
 		var cellPOS = tilemapLayer1.world_to_map(mousePOS)
 		
 		hover.global_position = tilemapLayer1.map_to_world(cellPOS)
+		
+		if get_enemy_by_cell_pos(cellPOS) != null:
+			hover.modulate = Color(1.0, 0.0, 0.0)
+		else:
+			hover.modulate = Color(1.0, 1.0, 1.0)
+		
 		if check_valid_to_move_cell(cellPOS):
 			hover.modulate.a = 0.75
 		else:
@@ -44,18 +77,54 @@ func _input(event):
 		
 		if Global.turn == true:
 			if Input.is_action_just_pressed("CLICK"):
-				if check_valid_to_move_cell(cellPOS) && check_distance(cellPOS, currentCellPOS) == 1:
-					move_player_with_animation(tilemapLayer1.map_to_world(cellPOS))
-					end_turn()
+				if check_distance(cellPOS, currentCellPOS) == 1:
+					if check_valid_to_move_cell(cellPOS):
+						move_player_with_animation(tilemapLayer1.map_to_world(cellPOS))
+						end_turn()
+					elif !check_valid_to_move_cell(cellPOS) && get_enemy_by_cell_pos(cellPOS) != null:
+						attack_enemy(cellPOS)
+						end_turn()
 
 
 
 func end_turn(waittime: bool = true):
-	Global.turn = false
+	if get_tree().get_nodes_in_group("enemy").size() > 0:
+		Global.turn = false
 	
 	yield(get_tree().create_timer(0.3 if waittime else 0.025), "timeout")
 	print("Игрок " + str(self) + " сделал ход на клетку " + str(currentCellPOS))
 	Global.emit_signal("enemyTurn")
+
+func attack_enemy(cellpos: Vector2, damage: int = attackDamage):
+	var enemy: Node2D = get_enemy_by_cell_pos(cellpos)
+	
+	if enemy != null:
+		enemy.damage(-damage)
+		print("Враг атакован")
+
+func damage(attackDamage: int):
+	health += attackDamage
+	tween.interpolate_property(sprite, "modulate", Color(1.0, 0.0, 0.0), Color(1.0, 1.0, 1.0), 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
+	tween.start()
+	
+	print("Игрок потерял " + str(attackDamage) + " здоровья. Осталось " + str(health) + " здоровья")
+	
+	if health <= 0: kill()
+
+func kill():
+	tween.interpolate_property(sprite, "modulate:g", 1.0, 0.0, 0.5)
+	tween.start()
+	
+	return   # позже сделаю смерть
+	
+#	queue_free()
+
+func get_enemy_by_cell_pos(cellpos: Vector2):
+	for i in get_tree().get_nodes_in_group("enemy"):
+		if i.currentCellPOS == cellpos:
+			return i
+	
+	return null
 
 func check_valid_to_move_cell(cellpos: Vector2):
 	var enemies: Array = get_tree().get_nodes_in_group("enemy")
