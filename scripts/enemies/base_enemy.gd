@@ -14,6 +14,12 @@ export(Array) var moveDirections = [
 	Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
 	Vector2(1, 1), Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1)
 ]
+export(Array) var attackDirections = [
+	Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+	Vector2(-1, -1), Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1),
+#	Vector2(2, 0), Vector2(-2, 0), Vector2(0, 2), Vector2(0, -2),
+]
+export(int) var visibleDistance = 10
 
 onready var tween: Tween = $Tween
 onready var sprite = $sprite
@@ -30,6 +36,7 @@ onready var default_animation_tween = $default_animation_tween
 func _init():
 	add_to_group("enemy")
 
+
 func _ready():
 	Global.connect("enemyTurn", self, "move_enemy_to_player")
 	
@@ -45,6 +52,7 @@ func _ready():
 	start_default_animation()
 
 
+
 func start_default_animation():
 	default_animation_tween.repeat = true
 	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
@@ -56,23 +64,23 @@ func move_enemy_to_player():
 	
 	var distance: int = check_distance(currentCellPOS, player.currentCellPOS)
 	
-	if distance <= attackDistance:
+	if check_attack_directions(player.currentCellPOS):
 		attack(attackDamage)
 		end_turn()
 		return
 	
 	if distance > attackDistance:
 #		var testMoveCell: Vector2 = currentCellPOS - Vector2(1, 0)   # чисто для теста, в одну сторону
-		var testMoveCell: Vector2 = find_best_step(player.currentCellPOS)   # чисто для теста, в одну сторону
+		var moveCell: Vector2 = find_best_step(player.currentCellPOS)
 		
-		if check_valid_to_move_cell(testMoveCell):
-			move_enemy_with_animation(tilemapLayer1.map_to_world(testMoveCell))
+		if check_valid_to_move_cell(moveCell):
+			move_enemy_with_animation(tilemapLayer1.map_to_world(moveCell))
 		end_turn()
 		return
 
-func find_best_step(target_cell: Vector2, currentcell: Vector2 = currentCellPOS) -> Vector2:
+func find_best_step(target_cell: Vector2, currentcell: Vector2 = currentCellPOS):
 	var best_dir = currentcell
-	var min_dist = 999
+	var min_dist = visibleDistance
 	
 	for i in moveDirections:
 		var check_cell = currentcell + i
@@ -84,6 +92,16 @@ func find_best_step(target_cell: Vector2, currentcell: Vector2 = currentCellPOS)
 				best_dir = check_cell
 	
 	return best_dir
+
+func check_attack_directions(target_cell: Vector2, currentcell: Vector2 = currentCellPOS):
+	for i in attackDirections:
+		var check_cell = currentcell + i
+		
+		if check_valid_to_move_cell(check_cell, true):
+			if check_cell == target_cell:
+				return true
+	
+	return false
 
 func end_turn():
 	Global.turn = true
@@ -116,17 +134,19 @@ func check_distance(cellpos: Vector2, currentpos: Vector2):
 	var distance: int = int(max(abs(currentpos.x - cellpos.x), abs(currentpos.y - cellpos.y)))
 	return distance
 
-func check_valid_to_move_cell(cellpos: Vector2):
+func check_valid_to_move_cell(cellpos: Vector2, disablePlayerCheck: bool = false):
 	var enemies: Array = get_tree().get_nodes_in_group("enemy")
 	for i in enemies:
 		if cellpos == i.currentCellPOS:
 			return false
 			break
 	
+	if !disablePlayerCheck && cellpos == player.currentCellPOS:
+		return false
+	
 	if (
 		tilemapLayer2.get_cell(cellpos.x, cellpos.y) == -1 &&
-		tilemapLayer1.get_cell(cellpos.x, cellpos.y) != -1 &&
-		cellpos != player.currentCellPOS
+		tilemapLayer1.get_cell(cellpos.x, cellpos.y) != -1
 	):
 		return true
 	else:

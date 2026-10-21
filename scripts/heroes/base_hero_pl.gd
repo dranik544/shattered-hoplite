@@ -3,17 +3,10 @@ extends Node2D
 
 var currentCellPOS: Vector2 = Vector2.ZERO
 
-
-
-# cheats
-var CHEATfreezeEnemies: bool = false
-
-
-
 export(NodePath) var tilemapPath
 export(NodePath) var hoverPath
 
-export(int) var health = 5
+export(int) var health = 6
 export(int) var attackDamage = 1
 
 onready var tween: Tween = $Tween
@@ -51,11 +44,6 @@ func start_default_animation():
 
 func _input(event):
 	if event is InputEvent:
-		# cheats
-		if Input.is_action_just_pressed("CHEAT_FREEZE_ENEMIES"):
-			CHEATfreezeEnemies = not CHEATfreezeEnemies
-			print("===" + ("+ВКЛЮЧЕН" if CHEATfreezeEnemies else "-ВЫКЛЮЧЕН") + " ЧИТ НА ЗАМОРОЗКУ ВРАГОВ! ===")
-		
 		if Input.is_action_just_pressed("WAIT"):
 			end_turn(false)
 	
@@ -112,7 +100,7 @@ func damage(attackDamage: int):
 	if health <= 0: kill()
 
 func kill():
-	tween.interpolate_property(sprite, "modulate:g", 1.0, 0.0, 0.5)
+	tween.interpolate_property(sprite, "modulate", sprite.modulate, Color(1.0, 0.0, 0.0), 1.0)
 	tween.start()
 	
 	return   # позже сделаю смерть

@@ -86,6 +86,11 @@ V={
  ]
 }
 
+[input_devices]
+
+pointing/android/enable_long_press_as_right_click=true
+pointing/android/enable_pan_and_scale_gestures=true
+
 [physics]
 
 common/enable_pause_aware_picking=true
