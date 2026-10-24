@@ -7,6 +7,7 @@ var freeze: bool = false
 export(NodePath) var tilemapPath
 export(NodePath) var playerPATH
 
+export(String) var enemyName = "Enemy"
 export(int) var health = 1
 export(int) var attackDistance = 1
 export(int) var attackDamage = 1
@@ -31,11 +32,11 @@ onready var tilemapLayer1: TileMap
 onready var tilemapLayer2: TileMap
 onready var player: Node2D = get_node_or_null(playerPATH)
 onready var default_animation_tween = $default_animation_tween
+onready var logtext: RichTextLabel
 
 
 func _init():
 	add_to_group("enemy")
-
 
 func _ready():
 	Global.connect("enemyTurn", self, "move_enemy_to_player")
@@ -45,6 +46,7 @@ func _ready():
 	tilemapLayer0 = tilemap.get_node("layer0")
 	tilemapLayer1 = tilemap.get_node("layer1")
 	tilemapLayer2 = tilemap.get_node("layer2")
+	logtext = get_tree().get_first_node_in_group("logtext")
 	
 	currentCellPOS = tilemapLayer1.world_to_map(global_position)
 	global_position = tilemapLayer1.map_to_world(currentCellPOS)
@@ -106,11 +108,9 @@ func check_attack_directions(target_cell: Vector2, currentcell: Vector2 = curren
 func end_turn():
 	Global.turn = true
 	yield(get_tree().create_timer(0.3), "timeout")
-	print("Враг " + str(self) + " сделал ход")
 
 func attack(damage: float = attackDamage):
 	player.damage(-damage)
-	print("Игрок атакован")
 
 func damage(attackDamage: int):
 	health += attackDamage
@@ -122,6 +122,7 @@ func damage(attackDamage: int):
 func kill():
 	freeze = true
 	remove_from_group("enemy")
+	logtext.print_log("[color=grey]The " + enemyName + " has been killed.\n")
 	
 	tween.interpolate_property(sprite, "modulate:a", 1.0, 0.0, 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
 	tween.interpolate_property(shadow, "modulate:a", 1.0, 0.0, 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)

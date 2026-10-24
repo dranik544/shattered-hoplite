@@ -19,6 +19,7 @@ onready var tilemap: Node2D = get_node_or_null(tilemapPath)
 onready var tilemapLayer0: TileMap
 onready var tilemapLayer1: TileMap
 onready var tilemapLayer2: TileMap
+onready var logtext: RichTextLabel
 
 
 func _init():
@@ -29,6 +30,7 @@ func _ready():
 	tilemapLayer0 = tilemap.get_node("layer0")
 	tilemapLayer1 = tilemap.get_node("layer1")
 	tilemapLayer2 = tilemap.get_node("layer2")
+	logtext = get_tree().get_first_node_in_group("logtext")
 	
 	currentCellPOS = tilemapLayer1.world_to_map(global_position)
 	global_position = tilemapLayer1.map_to_world(currentCellPOS)
@@ -80,7 +82,6 @@ func end_turn(waittime: bool = true):
 		Global.turn = false
 	
 	yield(get_tree().create_timer(0.3 if waittime else 0.025), "timeout")
-	print("Игрок " + str(self) + " сделал ход на клетку " + str(currentCellPOS))
 	Global.emit_signal("enemyTurn")
 
 func attack_enemy(cellpos: Vector2, damage: int = attackDamage):
@@ -88,14 +89,11 @@ func attack_enemy(cellpos: Vector2, damage: int = attackDamage):
 	
 	if enemy != null:
 		enemy.damage(-damage)
-		print("Враг атакован")
 
 func damage(attackDamage: int):
 	health += attackDamage
 	tween.interpolate_property(sprite, "modulate", Color(1.0, 0.0, 0.0), Color(1.0, 1.0, 1.0), 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
 	tween.start()
-	
-	print("Игрок потерял " + str(attackDamage) + " здоровья. Осталось " + str(health) + " здоровья")
 	
 	if health <= 0: kill()
 
