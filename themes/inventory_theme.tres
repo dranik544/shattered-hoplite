@@ -1,0 +1,24 @@
+[gd_resource type="Theme" load_steps=5 format=2]
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[sub_resource type="Gradient" id=5]
+interpolation_mode = 2
+offsets = PoolRealArray( 0.653846 )
+colors = PoolColorArray( 0.313726, 0.313726, 0.313726, 1 )
+
+[sub_resource type="GradientTexture2D" id=6]
+gradient = SubResource( 5 )
+width = 1
+height = 1
+
+[sub_resource type="StyleBoxTexture" id=7]
+texture = SubResource( 6 )
+region_rect = Rect2( 0, 0, 64, 64 )
+
+[resource]
+Button/styles/disabled = SubResource( 4 )
+Button/styles/focus = SubResource( 4 )
+Button/styles/hover = SubResource( 4 )
+Button/styles/normal = SubResource( 4 )
+Button/styles/pressed = SubResource( 7 )

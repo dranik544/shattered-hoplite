@@ -24,5 +24,5 @@ func _update_log():
 	bbcode_text = logtextstring
 	
 	modulate.a = 1.0
-	tween.interpolate_property(self, "modulate:a", 1.0, 0.5, 2.5)
+	tween.interpolate_property(self, "modulate:a", 1.0, 0.35, 3.0)
 	tween.start()

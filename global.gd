@@ -2,7 +2,7 @@ extends Node
 
 var turn: bool = true   # true - игрок ходит, false - враги ходят
 var inventory: Array = []
-var maxInventorySlots: int = 8
+var maxInventorySlots: int = 20
 
 signal enemyTurn
 
