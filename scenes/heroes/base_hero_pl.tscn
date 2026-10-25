@@ -1,14 +1,15 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://sprites/heroes/hoplite/hoplite_pl2.png" type="Texture" id=1]
 [ext_resource path="res://sprites/shadow1.png" type="Texture" id=2]
 [ext_resource path="res://scripts/heroes/base_hero_pl.gd" type="Script" id=3]
 [ext_resource path="res://sprites/icons/inventory_icon1.png" type="Texture" id=4]
 [ext_resource path="res://sprites/icons/inventory_icon2.png" type="Texture" id=5]
-[ext_resource path="res://sprites/ui_border1.png" type="Texture" id=6]
+[ext_resource path="res://sprites/ui_border6.png" type="Texture" id=6]
 [ext_resource path="res://themes/inventory_theme.tres" type="Theme" id=7]
-[ext_resource path="res://sprites/ui_border2.png" type="Texture" id=9]
-[ext_resource path="res://sprites/null_inv_slot1.png" type="Texture" id=10]
+[ext_resource path="res://sprites/null_inv_slot3.png" type="Texture" id=8]
+[ext_resource path="res://sprites/ui_border5.png" type="Texture" id=9]
+[ext_resource path="res://sprites/icons/inventory_icon3.png" type="Texture" id=10]
 [ext_resource path="res://fonts/Classic-Console-Neue-Regular.ttf" type="DynamicFontData" id=11]
 
 [sub_resource type="Gradient" id=1]
@@ -39,7 +40,7 @@ width = 1
 
 [sub_resource type="StyleBoxTexture" id=7]
 texture = SubResource( 12 )
-region_rect = Rect2( 0, 0, 2048, 1 )
+region_rect = Rect2( 0, 0, 4, 1 )
 
 [sub_resource type="Gradient" id=8]
 offsets = PoolRealArray( 0 )
@@ -99,11 +100,11 @@ margin_right = 120.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 0, 32 )
-texture = ExtResource( 9 )
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+texture = ExtResource( 6 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
 
 [node name="buttons" type="HBoxContainer" parent="CanvasLayer/bottom_panel"]
 anchor_right = 1.0
@@ -141,18 +142,24 @@ texture_pressed = ExtResource( 5 )
 expand = true
 
 [node name="separator1" type="Control" parent="CanvasLayer/bottom_panel/buttons"]
-margin_right = 204.0
+margin_right = 207.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 
 [node name="inventory_button" type="TextureButton" parent="CanvasLayer/bottom_panel/buttons"]
-margin_left = 208.0
+margin_left = 211.0
+margin_right = 235.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 24, 32 )
+texture_normal = ExtResource( 10 )
+expand = true
+stretch_mode = 5
+
+[node name="separator2" type="Control" parent="CanvasLayer/bottom_panel/buttons"]
+margin_left = 239.0
 margin_right = 240.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-texture_normal = ExtResource( 4 )
-texture_pressed = ExtResource( 5 )
-expand = true
+rect_min_size = Vector2( 1, 0 )
 
 [node name="healthbar" type="ProgressBar" parent="CanvasLayer/bottom_panel"]
 anchor_left = 0.5
@@ -191,17 +198,17 @@ margin_bottom = 83.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_min_size = Vector2( 0, 32 )
-texture = ExtResource( 6 )
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+texture = ExtResource( 9 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
 
 [node name="label" type="Label" parent="CanvasLayer/inventory"]
-margin_left = 3.0
-margin_top = 3.0
-margin_right = 95.0
-margin_bottom = 18.0
+margin_left = 10.0
+margin_top = 7.0
+margin_right = 106.0
+margin_bottom = 22.0
 custom_fonts/font = SubResource( 4 )
 text = "Inventory"
 valign = 1
@@ -209,10 +216,10 @@ valign = 1
 [node name="gold" type="Label" parent="CanvasLayer/inventory"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -96.0
-margin_top = 3.0
-margin_right = -4.0
-margin_bottom = 18.0
+margin_left = -109.0
+margin_top = 7.0
+margin_right = -10.0
+margin_bottom = 22.0
 custom_colors/font_color = Color( 1, 1, 0, 1 )
 custom_fonts/font = SubResource( 4 )
 text = "0 G"
@@ -222,258 +229,258 @@ valign = 1
 [node name="gridbg" type="GridContainer" parent="CanvasLayer/inventory"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = 19.0
-margin_right = -3.0
-margin_bottom = -3.0
+margin_left = 7.0
+margin_top = 23.0
+margin_right = -7.0
+margin_bottom = -7.0
 columns = 5
 
 [node name="NinePatchRect1" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_right = 42.0
-margin_bottom = 41.0
+margin_right = 40.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 46.0
-margin_right = 88.0
-margin_bottom = 41.0
+margin_left = 44.0
+margin_right = 84.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect3" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 92.0
-margin_right = 134.0
-margin_bottom = 41.0
+margin_left = 88.0
+margin_right = 128.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect4" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 138.0
-margin_right = 179.0
-margin_bottom = 41.0
+margin_left = 132.0
+margin_right = 172.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect5" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 183.0
-margin_right = 224.0
-margin_bottom = 41.0
+margin_left = 176.0
+margin_right = 216.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect6" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_top = 45.0
-margin_right = 42.0
-margin_bottom = 86.0
+margin_top = 43.0
+margin_right = 40.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect7" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 46.0
-margin_top = 45.0
-margin_right = 88.0
-margin_bottom = 86.0
+margin_left = 44.0
+margin_top = 43.0
+margin_right = 84.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect8" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 92.0
-margin_top = 45.0
-margin_right = 134.0
-margin_bottom = 86.0
+margin_left = 88.0
+margin_top = 43.0
+margin_right = 128.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect9" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 138.0
-margin_top = 45.0
-margin_right = 179.0
-margin_bottom = 86.0
+margin_left = 132.0
+margin_top = 43.0
+margin_right = 172.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect10" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 183.0
-margin_top = 45.0
-margin_right = 224.0
-margin_bottom = 86.0
+margin_left = 176.0
+margin_top = 43.0
+margin_right = 216.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect11" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_top = 90.0
-margin_right = 42.0
-margin_bottom = 131.0
+margin_top = 86.0
+margin_right = 40.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect12" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 46.0
-margin_top = 90.0
-margin_right = 88.0
-margin_bottom = 131.0
+margin_left = 44.0
+margin_top = 86.0
+margin_right = 84.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect13" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 92.0
-margin_top = 90.0
-margin_right = 134.0
-margin_bottom = 131.0
+margin_left = 88.0
+margin_top = 86.0
+margin_right = 128.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect14" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 138.0
-margin_top = 90.0
-margin_right = 179.0
-margin_bottom = 131.0
+margin_left = 132.0
+margin_top = 86.0
+margin_right = 172.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect15" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 183.0
-margin_top = 90.0
-margin_right = 224.0
-margin_bottom = 131.0
+margin_left = 176.0
+margin_top = 86.0
+margin_right = 216.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect16" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_top = 135.0
-margin_right = 42.0
-margin_bottom = 176.0
+margin_top = 129.0
+margin_right = 40.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect17" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 46.0
-margin_top = 135.0
-margin_right = 88.0
-margin_bottom = 176.0
+margin_left = 44.0
+margin_top = 129.0
+margin_right = 84.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect18" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 92.0
-margin_top = 135.0
-margin_right = 134.0
-margin_bottom = 176.0
+margin_left = 88.0
+margin_top = 129.0
+margin_right = 128.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect19" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 138.0
-margin_top = 135.0
-margin_right = 179.0
-margin_bottom = 176.0
+margin_left = 132.0
+margin_top = 129.0
+margin_right = 172.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 
 [node name="NinePatchRect20" type="NinePatchRect" parent="CanvasLayer/inventory/gridbg"]
-margin_left = 183.0
-margin_top = 135.0
-margin_right = 224.0
-margin_bottom = 176.0
+margin_left = 176.0
+margin_top = 129.0
+margin_right = 216.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
@@ -482,15 +489,15 @@ patch_margin_bottom = 1
 [node name="buttons" type="GridContainer" parent="CanvasLayer/inventory"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 3.0
-margin_top = 19.0
-margin_right = -3.0
-margin_bottom = -3.0
+margin_left = 7.0
+margin_top = 23.0
+margin_right = -7.0
+margin_bottom = -7.0
 columns = 5
 
 [node name="Button1" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_right = 42.0
-margin_bottom = 41.0
+margin_right = 40.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -498,9 +505,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button2" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 46.0
-margin_right = 88.0
-margin_bottom = 41.0
+margin_left = 44.0
+margin_right = 84.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -508,9 +515,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button3" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 92.0
-margin_right = 134.0
-margin_bottom = 41.0
+margin_left = 88.0
+margin_right = 128.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -518,9 +525,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button4" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 138.0
-margin_right = 179.0
-margin_bottom = 41.0
+margin_left = 132.0
+margin_right = 172.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -528,9 +535,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button5" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 183.0
-margin_right = 224.0
-margin_bottom = 41.0
+margin_left = 176.0
+margin_right = 216.0
+margin_bottom = 39.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -538,9 +545,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button6" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_top = 45.0
-margin_right = 42.0
-margin_bottom = 86.0
+margin_top = 43.0
+margin_right = 40.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -548,10 +555,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button7" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 46.0
-margin_top = 45.0
-margin_right = 88.0
-margin_bottom = 86.0
+margin_left = 44.0
+margin_top = 43.0
+margin_right = 84.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -559,10 +566,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button8" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 92.0
-margin_top = 45.0
-margin_right = 134.0
-margin_bottom = 86.0
+margin_left = 88.0
+margin_top = 43.0
+margin_right = 128.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -570,10 +577,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button9" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 138.0
-margin_top = 45.0
-margin_right = 179.0
-margin_bottom = 86.0
+margin_left = 132.0
+margin_top = 43.0
+margin_right = 172.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -581,10 +588,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button10" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 183.0
-margin_top = 45.0
-margin_right = 224.0
-margin_bottom = 86.0
+margin_left = 176.0
+margin_top = 43.0
+margin_right = 216.0
+margin_bottom = 82.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -592,9 +599,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button11" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_top = 90.0
-margin_right = 42.0
-margin_bottom = 131.0
+margin_top = 86.0
+margin_right = 40.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -602,10 +609,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button12" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 46.0
-margin_top = 90.0
-margin_right = 88.0
-margin_bottom = 131.0
+margin_left = 44.0
+margin_top = 86.0
+margin_right = 84.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -613,10 +620,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button13" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 92.0
-margin_top = 90.0
-margin_right = 134.0
-margin_bottom = 131.0
+margin_left = 88.0
+margin_top = 86.0
+margin_right = 128.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -624,10 +631,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button14" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 138.0
-margin_top = 90.0
-margin_right = 179.0
-margin_bottom = 131.0
+margin_left = 132.0
+margin_top = 86.0
+margin_right = 172.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -635,10 +642,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button15" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 183.0
-margin_top = 90.0
-margin_right = 224.0
-margin_bottom = 131.0
+margin_left = 176.0
+margin_top = 86.0
+margin_right = 216.0
+margin_bottom = 125.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -646,9 +653,9 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button16" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_top = 135.0
-margin_right = 42.0
-margin_bottom = 176.0
+margin_top = 129.0
+margin_right = 40.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -656,10 +663,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button17" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 46.0
-margin_top = 135.0
-margin_right = 88.0
-margin_bottom = 176.0
+margin_left = 44.0
+margin_top = 129.0
+margin_right = 84.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -667,10 +674,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button18" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 92.0
-margin_top = 135.0
-margin_right = 134.0
-margin_bottom = 176.0
+margin_left = 88.0
+margin_top = 129.0
+margin_right = 128.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -678,10 +685,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button19" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 138.0
-margin_top = 135.0
-margin_right = 179.0
-margin_bottom = 176.0
+margin_left = 132.0
+margin_top = 129.0
+margin_right = 172.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
@@ -689,10 +696,10 @@ icon_align = 1
 expand_icon = true
 
 [node name="Button20" type="Button" parent="CanvasLayer/inventory/buttons"]
-margin_left = 183.0
-margin_top = 135.0
-margin_right = 224.0
-margin_bottom = 176.0
+margin_left = 176.0
+margin_top = 129.0
+margin_right = 216.0
+margin_bottom = 168.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
