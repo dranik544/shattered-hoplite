@@ -49,8 +49,8 @@ func _ready():
 
 func start_default_animation():
 	default_animation_tween.repeat = true
-	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.35, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.35, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
 	default_animation_tween.start()
 
 func _input(event):
@@ -64,7 +64,7 @@ func _input(event):
 		
 		hover.global_position = tilemapLayer1.map_to_world(cellPOS)
 		
-		if get_enemy_by_cell_pos(cellPOS) != null:
+		if get_object_by_cell_pos(cellPOS, "enemy") != null:
 			hover.modulate = Color(1.0, 0.0, 0.0)
 		else:
 			hover.modulate = Color(1.0, 1.0, 1.0)
@@ -80,8 +80,13 @@ func _input(event):
 					if check_valid_to_move_cell(cellPOS):
 						move_player_with_animation(tilemapLayer1.map_to_world(cellPOS))
 						end_turn()
-					elif !check_valid_to_move_cell(cellPOS) && get_enemy_by_cell_pos(cellPOS) != null:
+					elif !check_valid_to_move_cell(cellPOS) && get_object_by_cell_pos(cellPOS, "enemy") != null:
 						attack_enemy(cellPOS)
+						end_turn()
+					elif !check_valid_to_move_cell(cellPOS) && get_object_by_cell_pos(cellPOS, "item") != null:
+						get_object_by_cell_pos(cellPOS, "item").pickup(
+							get_viewport().get_canvas_transform().affine_inverse().xform(inventory_button.rect_global_position + (inventory_button.rect_size / 2))
+						)
 						end_turn()
 
 
@@ -94,7 +99,7 @@ func end_turn(waittime: bool = true):
 	Global.emit_signal("enemyTurn")
 
 func attack_enemy(cellpos: Vector2, damage: int = attackDamage):
-	var enemy: Node2D = get_enemy_by_cell_pos(cellpos)
+	var enemy: Node2D = get_object_by_cell_pos(cellpos, "enemy")
 	
 	if enemy != null:
 		enemy.damage(-damage)
@@ -116,19 +121,22 @@ func kill():
 	
 #	queue_free()
 
-func get_enemy_by_cell_pos(cellpos: Vector2):
-	for i in get_tree().get_nodes_in_group("enemy"):
+func get_object_by_cell_pos(cellpos: Vector2, object_group_name: String):
+	for i in get_tree().get_nodes_in_group(object_group_name):
 		if i.currentCellPOS == cellpos:
 			return i
 	
 	return null
 
 func check_valid_to_move_cell(cellpos: Vector2):
-	var enemies: Array = get_tree().get_nodes_in_group("enemy")
-	for i in enemies:
-		if cellpos == i.currentCellPOS:
-			return false
-			break
+	var groups: Array = [
+		get_tree().get_nodes_in_group("enemy"),
+		get_tree().get_nodes_in_group("item"),
+	]
+	for i in groups:
+		for o in i:
+			if cellpos == o.currentCellPOS:
+				return false
 	
 	if (
 		tilemapLayer2.get_cell(cellpos.x, cellpos.y) == -1 &&

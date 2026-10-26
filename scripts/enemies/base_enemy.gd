@@ -57,8 +57,8 @@ func _ready():
 
 func start_default_animation():
 	default_animation_tween.repeat = true
-	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.3, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.4, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.4, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
 	default_animation_tween.start()
 
 func move_enemy_to_player():
@@ -136,11 +136,14 @@ func check_distance(cellpos: Vector2, currentpos: Vector2):
 	return distance
 
 func check_valid_to_move_cell(cellpos: Vector2, disablePlayerCheck: bool = false):
-	var enemies: Array = get_tree().get_nodes_in_group("enemy")
-	for i in enemies:
-		if cellpos == i.currentCellPOS:
-			return false
-			break
+	var groups: Array = [
+		get_tree().get_nodes_in_group("enemy"),
+		get_tree().get_nodes_in_group("item"),
+	]
+	for i in groups:
+		for o in i:
+			if cellpos == o.currentCellPOS:
+				return false
 	
 	if !disablePlayerCheck && cellpos == player.currentCellPOS:
 		return false
