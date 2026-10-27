@@ -1,15 +1,18 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://sprites/heroes/hoplite/hoplite_pl2.png" type="Texture" id=1]
 [ext_resource path="res://sprites/shadow1.png" type="Texture" id=2]
 [ext_resource path="res://scripts/heroes/base_hero_pl.gd" type="Script" id=3]
 [ext_resource path="res://scripts/inventory.gd" type="Script" id=4]
+[ext_resource path="res://sprites/items/potion_health1.png" type="Texture" id=5]
 [ext_resource path="res://sprites/ui_border6.png" type="Texture" id=6]
 [ext_resource path="res://themes/inventory_theme.tres" type="Theme" id=7]
 [ext_resource path="res://sprites/null_inv_slot3.png" type="Texture" id=8]
 [ext_resource path="res://sprites/ui_border5.png" type="Texture" id=9]
 [ext_resource path="res://sprites/icons/inventory_icon3.png" type="Texture" id=10]
 [ext_resource path="res://fonts/Classic-Console-Neue-Regular.ttf" type="DynamicFontData" id=11]
+[ext_resource path="res://themes/default_theme.tres" type="Theme" id=12]
+[ext_resource path="res://scripts/owindow.gd" type="Script" id=13]
 
 [sub_resource type="Gradient" id=1]
 colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 1 )
@@ -54,6 +57,13 @@ texture = SubResource( 9 )
 region_rect = Rect2( 0, 0, 2048, 1 )
 
 [sub_resource type="DynamicFont" id=4]
+outline_size = 1
+outline_color = Color( 0, 0, 0, 0.784314 )
+use_mipmaps = true
+font_data = ExtResource( 11 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 14
 outline_size = 1
 outline_color = Color( 0, 0, 0, 0.784314 )
 use_mipmaps = true
@@ -157,7 +167,6 @@ align = 2
 valign = 2
 
 [node name="inventory" type="Control" parent="CanvasLayer"]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -679,4 +688,113 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 7 )
 icon_align = 1
+expand_icon = true
+
+[node name="owindow" type="Control" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -90.0
+margin_top = -24.0
+margin_right = 90.0
+margin_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 180, 48 )
+script = ExtResource( 13 )
+
+[node name="bg" type="NinePatchRect" parent="CanvasLayer/owindow"]
+modulate = Color( 1, 1, 1, 0.9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 0, 32 )
+texture = ExtResource( 9 )
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+
+[node name="vbox" type="VBoxContainer" parent="CanvasLayer/owindow"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 9.0
+margin_top = 9.0
+margin_right = -9.0
+margin_bottom = -9.0
+
+[node name="objectTextureAndName" type="HBoxContainer" parent="CanvasLayer/owindow/vbox"]
+margin_right = 162.0
+margin_bottom = 24.0
+alignment = 1
+
+[node name="objectTexture" type="TextureRect" parent="CanvasLayer/owindow/vbox/objectTextureAndName"]
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+texture = ExtResource( 5 )
+stretch_mode = 6
+
+[node name="objectName" type="Label" parent="CanvasLayer/owindow/vbox/objectTextureAndName"]
+margin_left = 28.0
+margin_top = 6.0
+margin_right = 162.0
+margin_bottom = 18.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 13 )
+text = "objectName"
+align = 1
+valign = 1
+
+[node name="objectDesc" type="RichTextLabel" parent="CanvasLayer/owindow/vbox"]
+margin_top = 28.0
+margin_right = 162.0
+margin_bottom = 82.0
+rect_min_size = Vector2( 128, 24 )
+bbcode_enabled = true
+bbcode_text = "
+as
+d
+as
+d
+as"
+text = "
+as
+d
+as
+d
+as"
+fit_content_height = true
+
+[node name="buttons" type="HBoxContainer" parent="CanvasLayer/owindow/vbox"]
+margin_top = 86.0
+margin_right = 162.0
+margin_bottom = 100.0
+alignment = 1
+
+[node name="cancelButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
+margin_left = 14.0
+margin_right = 56.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 42, 0 )
+theme = ExtResource( 12 )
+custom_colors/font_color = Color( 1, 0.53, 0.5, 1 )
+text = "Cancel"
+expand_icon = true
+
+[node name="dropButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
+margin_left = 60.0
+margin_right = 102.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 42, 0 )
+theme = ExtResource( 12 )
+text = "Drop"
+expand_icon = true
+
+[node name="useButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
+margin_left = 106.0
+margin_right = 148.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 42, 0 )
+text = "Use"
 expand_icon = true

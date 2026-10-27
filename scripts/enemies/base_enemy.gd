@@ -107,6 +107,7 @@ func check_attack_directions(target_cell: Vector2, currentcell: Vector2 = curren
 
 func end_turn():
 	Global.turn = true
+	Global.totalTurns += 1
 	yield(get_tree().create_timer(0.3), "timeout")
 
 func attack(damage: float = attackDamage):

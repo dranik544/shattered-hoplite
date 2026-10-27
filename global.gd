@@ -1,6 +1,7 @@
 extends Node
 
 var turn: bool = true   # true - игрок ходит, false - враги ходят
+var totalTurns: int = 0
 var inventory: Array = []
 var maxInventorySlots: int = 20
 
@@ -11,6 +12,7 @@ signal inventoryUpdated
 # template:
 # 	var info: Dictionary = {
 # 		"itemName": itemName,
+# 		"itemDesc": itemDesc,
 # 		"itemTexture": sprite.texture,
 # 		"itemScenePath": filename
 # 	}

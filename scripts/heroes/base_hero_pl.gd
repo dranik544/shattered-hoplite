@@ -95,6 +95,7 @@ func end_turn(waittime: bool = true):
 	if get_tree().get_nodes_in_group("enemy").size() > 0:
 		Global.turn = false
 	
+	Global.totalTurns += 1
 	yield(get_tree().create_timer(0.3 if waittime else 0.025), "timeout")
 	Global.emit_signal("enemyTurn")
 

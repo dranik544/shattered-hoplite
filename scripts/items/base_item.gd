@@ -6,6 +6,7 @@ var currentCellPOS: Vector2 = Vector2.ZERO
 export(NodePath) var tilemapPath
 
 export(String) var itemName = "Item"
+export(String) var itemDesc = "Item desc."
 
 onready var tween = $Tween
 onready var shadow = $shadow
@@ -36,6 +37,7 @@ func _ready():
 func pickup(inventory_pos: Vector2 = Vector2.ZERO):
 	var info: Dictionary = {
 		"itemName": itemName,
+		"itemDesc": itemDesc,
 		"itemTexture": sprite.texture,
 		"itemScenePath": filename
 	}
@@ -53,3 +55,6 @@ func pickup(inventory_pos: Vector2 = Vector2.ZERO):
 		yield(tween, "tween_all_completed")
 	
 	queue_free()
+
+func use():
+	return
