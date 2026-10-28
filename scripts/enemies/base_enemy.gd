@@ -58,7 +58,7 @@ func _ready():
 func start_default_animation():
 	default_animation_tween.repeat = true
 	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.4, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.4, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.4, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.4)
 	default_animation_tween.start()
 
 func move_enemy_to_player():

@@ -74,17 +74,20 @@ offset = Vector2( 0, 6 )
 [node name="ysort" type="YSort" parent="."]
 
 [node name="hoplite_pl" parent="ysort" instance=ExtResource( 3 )]
-position = Vector2( 11, 0 )
+position = Vector2( 32, -18 )
 tilemapPath = NodePath("../../tilemap")
 hoverPath = NodePath("../../hover")
+health = 24
+maxHealth = 24
+attackDamage = 6
 
 [node name="base_enemy" parent="ysort" instance=ExtResource( 6 )]
 position = Vector2( 48, 7 )
-enemyName = "Skeleton"
-health = 3
+enemyName = "Стёпа гей"
 attackDistance = 0
-attackDamage = 0
+attackDamage = 999
 moveDirections = [ Vector2( 2, 0 ), Vector2( -2, 0 ), Vector2( 0, 2 ), Vector2( 0, -2 ), Vector2( 2, 2 ), Vector2( -2, -2 ), Vector2( 2, -2 ), Vector2( -2, 2 ) ]
+visibleDistance = 2
 
 [node name="base_enemy2" parent="ysort" instance=ExtResource( 6 )]
 position = Vector2( -64, 29 )
@@ -96,7 +99,7 @@ position = Vector2( 23, -61 )
 enemyName = "Skeleton"
 
 [node name="base_enemy4" parent="ysort" instance=ExtResource( 6 )]
-position = Vector2( -55, -25 )
+position = Vector2( -24, 24 )
 enemyName = "Skeleton"
 
 [node name="base_enemy5" parent="ysort" instance=ExtResource( 6 )]
@@ -104,20 +107,23 @@ position = Vector2( -73, -12 )
 enemyName = "Skeleton"
 
 [node name="base_item" parent="ysort" instance=ExtResource( 11 )]
-position = Vector2( 0, 3 )
-itemName = "Regeneration potion"
+position = Vector2( 32, -7 )
+itemName = "Item N1"
+itemDesc = "1\\n1\\n1\\n1"
 
 [node name="base_item2" parent="ysort" instance=ExtResource( 11 )]
-position = Vector2( -9, -1 )
-itemName = "Regeneration potion"
+position = Vector2( 23, -11 )
+itemName = "Item N2"
 
 [node name="base_item3" parent="ysort" instance=ExtResource( 11 )]
-position = Vector2( -17, -7 )
-itemName = "Regeneration potion"
+position = Vector2( 15, -17 )
+itemName = "Item N3"
+itemDesc = "\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a\\n 1 \\n 1a"
 
 [node name="base_item4" parent="ysort" instance=ExtResource( 11 )]
-position = Vector2( -8, -12 )
-itemName = "Regeneration potion"
+position = Vector2( 24, -22 )
+itemName = "Item N4"
+itemDesc = "burgers"
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 visible = false

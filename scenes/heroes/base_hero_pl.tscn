@@ -167,6 +167,7 @@ align = 2
 valign = 2
 
 [node name="inventory" type="Control" parent="CanvasLayer"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -695,20 +696,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -90.0
-margin_top = -24.0
-margin_right = 90.0
-margin_bottom = 24.0
+margin_left = -96.0
+margin_top = -18.0
+margin_right = 96.0
+margin_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
-rect_min_size = Vector2( 180, 48 )
+rect_min_size = Vector2( 192, 36 )
 script = ExtResource( 13 )
 
 [node name="bg" type="NinePatchRect" parent="CanvasLayer/owindow"]
 modulate = Color( 1, 1, 1, 0.9 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 0, 32 )
+rect_min_size = Vector2( 192, 63 )
 texture = ExtResource( 9 )
 patch_margin_left = 9
 patch_margin_top = 9
@@ -718,13 +719,15 @@ patch_margin_bottom = 9
 [node name="vbox" type="VBoxContainer" parent="CanvasLayer/owindow"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 9.0
-margin_top = 9.0
-margin_right = -9.0
-margin_bottom = -9.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 176, 59 )
+custom_constants/separation = 6
 
 [node name="objectTextureAndName" type="HBoxContainer" parent="CanvasLayer/owindow/vbox"]
-margin_right = 162.0
+margin_right = 176.0
 margin_bottom = 24.0
 alignment = 1
 
@@ -738,7 +741,7 @@ stretch_mode = 6
 [node name="objectName" type="Label" parent="CanvasLayer/owindow/vbox/objectTextureAndName"]
 margin_left = 28.0
 margin_top = 6.0
-margin_right = 162.0
+margin_right = 176.0
 margin_bottom = 18.0
 size_flags_horizontal = 3
 custom_fonts/font = SubResource( 13 )
@@ -747,44 +750,34 @@ align = 1
 valign = 1
 
 [node name="objectDesc" type="RichTextLabel" parent="CanvasLayer/owindow/vbox"]
-margin_top = 28.0
-margin_right = 162.0
-margin_bottom = 82.0
-rect_min_size = Vector2( 128, 24 )
+margin_top = 30.0
+margin_right = 176.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 128, 8 )
 bbcode_enabled = true
-bbcode_text = "
-as
-d
-as
-d
-as"
-text = "
-as
-d
-as
-d
-as"
+bbcode_text = "objectDesc."
+text = "objectDesc."
 fit_content_height = true
 
 [node name="buttons" type="HBoxContainer" parent="CanvasLayer/owindow/vbox"]
-margin_top = 86.0
-margin_right = 162.0
-margin_bottom = 100.0
+margin_top = 45.0
+margin_right = 176.0
+margin_bottom = 59.0
 alignment = 1
 
-[node name="cancelButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
-margin_left = 14.0
-margin_right = 56.0
+[node name="closeButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
+margin_left = 21.0
+margin_right = 63.0
 margin_bottom = 14.0
 rect_min_size = Vector2( 42, 0 )
 theme = ExtResource( 12 )
 custom_colors/font_color = Color( 1, 0.53, 0.5, 1 )
-text = "Cancel"
+text = "Close"
 expand_icon = true
 
 [node name="dropButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
-margin_left = 60.0
-margin_right = 102.0
+margin_left = 67.0
+margin_right = 109.0
 margin_bottom = 14.0
 rect_min_size = Vector2( 42, 0 )
 theme = ExtResource( 12 )
@@ -792,8 +785,8 @@ text = "Drop"
 expand_icon = true
 
 [node name="useButton" type="Button" parent="CanvasLayer/owindow/vbox/buttons"]
-margin_left = 106.0
-margin_right = 148.0
+margin_left = 113.0
+margin_right = 155.0
 margin_bottom = 14.0
 rect_min_size = Vector2( 42, 0 )
 text = "Use"

@@ -7,7 +7,7 @@ export(NodePath) var tilemapPath
 export(NodePath) var hoverPath
 
 export(int) var health = 10
-var maxHealth: int = health
+export(int) var maxHealth = 10
 export(int) var attackDamage = 1
 
 onready var tween: Tween = $Tween
@@ -17,6 +17,7 @@ onready var shadow: Sprite = $shadow
 onready var default_animation_tween: Tween = $default_animation_tween
 
 onready var inventory: Control = $CanvasLayer/inventory
+onready var owindow: Control = $CanvasLayer/owindow
 onready var inventory_button = $CanvasLayer/bottom_panel/buttons/inventory_button
 onready var healthbar = $CanvasLayer/bottom_panel/healthbar
 onready var healthbar_label = $CanvasLayer/bottom_panel/healthbar/Label
@@ -44,13 +45,15 @@ func _ready():
 	global_position = tilemapLayer1.map_to_world(currentCellPOS)
 	
 	start_default_animation()
+	
+	damage(0)
 
 
 
 func start_default_animation():
 	default_animation_tween.repeat = true
 	default_animation_tween.interpolate_property(sprite, "scale", Vector2(0.95, 1.00), Vector2(1.00, 0.95), 0.35, Tween.TRANS_SINE, Tween.EASE_IN_OUT)
-	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.35, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.5)
+	default_animation_tween.interpolate_property(sprite, "scale", Vector2(1.00, 0.95), Vector2(0.95, 1.00), 0.35, Tween.TRANS_SINE, Tween.EASE_IN_OUT, 0.35)
 	default_animation_tween.start()
 
 func _input(event):
@@ -75,7 +78,7 @@ func _input(event):
 			hover.modulate.a = 0.40
 		
 		if Global.turn == true:
-			if Input.is_action_just_pressed("CLICK") && !inventory.visible:
+			if Input.is_action_just_pressed("CLICK") && !inventory.visible && !owindow.visible:
 				if check_distance(cellPOS, currentCellPOS) == 1:
 					if check_valid_to_move_cell(cellPOS):
 						move_player_with_animation(tilemapLayer1.map_to_world(cellPOS))
@@ -107,8 +110,11 @@ func attack_enemy(cellpos: Vector2, damage: int = attackDamage):
 
 func damage(attackDamage: int):
 	health += attackDamage
+	
+	healthbar.max_value = maxHealth
 	healthbar.value = health
 	healthbar_label.text = str(health) + "/" + str(maxHealth)
+	
 	tween.interpolate_property(sprite, "modulate", Color(1.0, 0.0, 0.0), Color(1.0, 1.0, 1.0), 0.2, Tween.TRANS_QUAD, Tween.EASE_IN)
 	tween.start()
 	
