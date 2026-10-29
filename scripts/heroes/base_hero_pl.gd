@@ -9,6 +9,22 @@ export(NodePath) var hoverPath
 export(int) var health = 10
 export(int) var maxHealth = 10
 export(int) var attackDamage = 1
+export(Array) var moveDirections = [
+	Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+	Vector2(1, 1), Vector2(-1, -1), Vector2(1, -1), Vector2(-1, 1),
+	Vector2(2, 0), Vector2(-2, 0), Vector2(0, 2), Vector2(0, -2),
+#	Vector2(-2, -2), Vector2(2, 2), Vector2(-2, 2), Vector2(2, -2),
+	Vector2(-1, -2), Vector2(1, 2), Vector2(-2, 1), Vector2(2, -1),
+	Vector2(-2, -1), Vector2(2, 1), Vector2(-1, 2), Vector2(1, -2),
+]
+export(Array) var attackDirections = [
+	Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1),
+	Vector2(-1, -1), Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1),
+#	Vector2(2, 0), Vector2(-2, 0), Vector2(0, 2), Vector2(0, -2),
+#	Vector2(-2, -2), Vector2(2, 2), Vector2(-2, 2), Vector2(2, -2),
+#	Vector2(-1, -2), Vector2(1, 2), Vector2(-2, 1), Vector2(2, -1),
+#	Vector2(-2, -1), Vector2(2, 1), Vector2(-1, 2), Vector2(1, -2),
+]
 
 onready var tween: Tween = $Tween
 onready var hover: Sprite = get_node(hoverPath)
@@ -66,7 +82,6 @@ func _input(event):
 		var cellPOS = tilemapLayer1.world_to_map(mousePOS)
 		
 		hover.global_position = tilemapLayer1.map_to_world(cellPOS)
-		
 		if get_object_by_cell_pos(cellPOS, "enemy") != null:
 			hover.modulate = Color(1.0, 0.0, 0.0)
 		else:
@@ -77,16 +92,20 @@ func _input(event):
 		else:
 			hover.modulate.a = 0.40
 		
-		if Global.turn == true:
-			if Input.is_action_just_pressed("CLICK") && !inventory.visible && !owindow.visible:
-				if check_distance(cellPOS, currentCellPOS) == 1:
-					if check_valid_to_move_cell(cellPOS):
-						move_player_with_animation(tilemapLayer1.map_to_world(cellPOS))
+		if Global.turn == true and event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_LEFT:
+			if !inventory.visible && !owindow.visible:
+				if get_object_by_cell_pos(cellPOS, "enemy") != null:
+					if attack_enemy(cellPOS):
 						end_turn()
-					elif !check_valid_to_move_cell(cellPOS) && get_object_by_cell_pos(cellPOS, "enemy") != null:
-						attack_enemy(cellPOS)
-						end_turn()
-					elif !check_valid_to_move_cell(cellPOS) && get_object_by_cell_pos(cellPOS, "item") != null:
+					return
+				
+				if check_valid_to_move_cell(cellPOS):
+					move_player_with_animation(tilemapLayer1.map_to_world(cellPOS))
+					end_turn()
+					return
+				
+				if get_object_by_cell_pos(cellPOS, "item") != null:
+					if check_valid_to_move_cell(cellPOS, true):
 						get_object_by_cell_pos(cellPOS, "item").pickup(
 							get_viewport().get_canvas_transform().affine_inverse().xform(inventory_button.rect_global_position + (inventory_button.rect_size / 2))
 						)
@@ -103,10 +122,14 @@ func end_turn(waittime: bool = true):
 	Global.emit_signal("enemyTurn")
 
 func attack_enemy(cellpos: Vector2, damage: int = attackDamage):
-	var enemy: Node2D = get_object_by_cell_pos(cellpos, "enemy")
+	if !check_attack_directions(cellpos): return false
 	
+	var enemy = get_object_by_cell_pos(cellpos, "enemy")
 	if enemy != null:
 		enemy.damage(-damage)
+		return true
+	
+	return false
 
 func damage(attackDamage: int):
 	health += attackDamage
@@ -135,15 +158,24 @@ func get_object_by_cell_pos(cellpos: Vector2, object_group_name: String):
 	
 	return null
 
-func check_valid_to_move_cell(cellpos: Vector2):
-	var groups: Array = [
-		get_tree().get_nodes_in_group("enemy"),
-		get_tree().get_nodes_in_group("item"),
-	]
-	for i in groups:
-		for o in i:
-			if cellpos == o.currentCellPOS:
-				return false
+func check_valid_to_move_cell(cellpos: Vector2, skipgroups: bool = false, skipmovedirections: bool = false):
+	if !skipmovedirections:
+		var valid = false
+		for dir in moveDirections:
+			if currentCellPOS + dir == cellpos:
+				valid = true
+				break
+		if !valid: return false
+	
+	if !skipgroups:
+		var groups: Array = [
+			get_tree().get_nodes_in_group("enemy"),
+			get_tree().get_nodes_in_group("item"),
+		]
+		for i in groups:
+			for o in i:
+				if cellpos == o.currentCellPOS:
+					return false
 	
 	if (
 		tilemapLayer2.get_cell(cellpos.x, cellpos.y) == -1 &&
@@ -156,6 +188,27 @@ func check_valid_to_move_cell(cellpos: Vector2):
 func check_distance(cellpos: Vector2, currentpos: Vector2 = currentCellPOS):
 	var distance: int = int(max(abs(currentpos.x - cellpos.x), abs(currentpos.y - cellpos.y)))
 	return distance
+
+func is_path_clear(start_cell: Vector2, end_cell: Vector2) -> bool:
+	var dist = int(max(abs(start_cell.x - end_cell.x), abs(start_cell.y - end_cell.y)))
+	var dir_x = sign(end_cell.x - start_cell.x)
+	var dir_y = sign(end_cell.y - start_cell.y)
+	
+	var check_cell = start_cell
+	for i in range(dist - 1):
+		check_cell.x += dir_x
+		check_cell.y += dir_y
+		if tilemapLayer2.get_cell(check_cell.x, check_cell.y) != -1:
+			return false
+	return true
+
+func check_attack_directions(target_cell: Vector2, currentcell: Vector2 = currentCellPOS) -> bool:
+	for dir in attackDirections:
+		var check_cell = currentcell + dir
+		if check_cell == target_cell:
+			if is_path_clear(currentcell, target_cell):
+				return true
+	return false
 
 func move_player_with_animation(to: Vector2, from: Vector2 = global_position):
 	currentCellPOS = tilemapLayer1.world_to_map(to)
